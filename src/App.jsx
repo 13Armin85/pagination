@@ -10,7 +10,6 @@ function App() {
     let data = await res.json();
     setRepos(data);
   };
-  console.log(repos);
 
   useEffect(() => {
     fetchData();
@@ -24,10 +23,7 @@ function App() {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = repos.slice(indexOfFirstItem, indexOfLastItem);
 
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(repos.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
-  }
+  const totalPages = Math.ceil(repos.length / itemsPerPage);
 
   return (
     <div className="wrapper">
@@ -42,17 +38,28 @@ function App() {
             &laquo;
           </a>
         )}
-        {pageNumbers.map((number) => (
-          <a
-            key={number}
-            href="#"
-            className={number === currentPage ? "active" : ""}
-            onClick={() => handlePageChange(number)}
-          >
-            {number}
+
+        {currentPage > 2 && <span>...</span>}
+
+        {currentPage > 1 && (
+          <a href="#" onClick={() => handlePageChange(currentPage - 1)}>
+            {currentPage - 1}
           </a>
-        ))}
-        {currentPage < pageNumbers.length && (
+        )}
+
+        <a href="#" className="active">
+          {currentPage}
+        </a>
+
+        {currentPage < totalPages && (
+          <a href="#" onClick={() => handlePageChange(currentPage + 1)}>
+            {currentPage + 1}
+          </a>
+        )}
+
+        {currentPage < totalPages - 1 && <span>...</span>}
+
+        {currentPage < totalPages && (
           <a href="#" onClick={() => handlePageChange(currentPage + 1)}>
             &raquo;
           </a>
